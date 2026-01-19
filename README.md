@@ -47,8 +47,29 @@ TBD
 # Building from source
 TBD
 
-# Dev environment
+# Development
+## Dependencies
+- Bun
+
+## Setup
+(To complete)
+- Download Pocketbase binary for your OS
+- Put it in a new directory named `backend` at the project root
+- Run `bun run server` once, create a superuser 
+- Create the DB schema (TODO: provide mock data and schema)
+
+Backend: localhost:8090
+Frontend: localhost:5173
+
+## Run
+`bun run dev`
+
+# Deployment
 TBD
+
+TODO: Safe deployment checklist
+TODO: Docker deployment container (also dev?)
+
 
 # Contributing
 
