@@ -1,32 +1,45 @@
-<script>
-    import { pb } from '$lib/pb';
-    let email = $state('');
-    let password = $state('');
-    let user = $state(pb.authStore.model);
-
-    // Sync state when auth changes
-    pb.authStore.onChange(() => {
-        user = pb.authStore.model;
-    });
-
-    async function login() {
-        await pb.collection('users').authWithPassword(email, password);
-    }
-
-    function logout() {
-        pb.authStore.clear();
-    }
-</script>
-
-{#if user}
-    <div class="flex items-center gap-4">
-        <span>Logged in as: {user.email}</span>
-        <button class="btn btn-error btn-sm" onclick={logout}>Logout</button>
+<div class="hero min-h-screen bg-base-200">
+  <div class="hero-content flex-col lg:flex-row-reverse">
+    <div class="text-center lg:text-left px-6">
+      <h1 class="text-5xl font-bold">Welcome Back!</h1>
+      <p class="py-6">Log in to access your dashboard and continue where you left off.</p>
     </div>
-{:else}
-    <div class="flex gap-2">
-        <input class="input input-bordered input-sm" type="email" bind:value={email} placeholder="Email" />
-        <input class="input input-bordered input-sm" type="password" bind:value={password} placeholder="Password" />
-        <button class="btn btn-primary btn-sm" onclick={login}>Login</button>
+
+    <div class="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+      <form class="card-body">
+        <div class="form-control">
+          <label class="label" for="login-email">
+            <span class="label-text">Email</span>
+          </label>
+          <input type="email" id="login-email" placeholder="email@example.com" class="input input-bordered" required />
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="login-password">
+            <span class="label-text">Password</span>
+          </label>
+          <input type="password" id="login-password" placeholder="password" class="input input-bordered" required />
+          <label class="label">
+            <a href="#" class="label-text-alt link link-hover">Forgot password?</a>
+          </label>
+        </div>
+
+        <div class="form-control mt-6">
+          <button class="btn btn-primary">Login</button>
+        </div>
+
+        <div class="divider">OR</div>
+
+        <button class="btn btn-outline btn-secondary">
+          Login with Google
+        </button>
+
+        <label class="label justify-center">
+          <span class="label-text-alt">New here? 
+            <a href="/signup" class="link link-hover link-primary font-semibold">Create account</a>
+          </span>
+        </label>
+      </form>
     </div>
-{/if}
+  </div>
+</div>

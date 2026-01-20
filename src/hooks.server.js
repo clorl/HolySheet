@@ -18,11 +18,11 @@ export const handle = async ({ event, resolve }) => {
     const isLoggedIn = event.locals.pb.authStore.isValid;
     const routeId = event.route.id || '';
 
-    if (routeId.includes('(guest)') && !isLoggedIn) {
+    if (routeId.includes('(guest)') && isLoggedIn) {
         throw redirect(303, '/my');
 		}
 
-    if (routeId.includes('(auth)') && isLoggedIn) {
+    if (routeId.includes('(auth)') && !isLoggedIn) {
         throw redirect(303, '/login');
     }
 

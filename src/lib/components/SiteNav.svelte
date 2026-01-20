@@ -49,8 +49,7 @@ import auth from '$lib/auth.svelte.js';
 			</div>
 
 		{:else}
-		<button class="btn btn-soft btn-primary">Log In</button>
-
+		<a class="btn btn-soft btn-primary" href="/login">Log In</a>
 		{/if}
 	</div>
 </div>

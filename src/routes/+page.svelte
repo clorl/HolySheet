@@ -1,7 +1,6 @@
 <script>
     import { onMount } from 'svelte';
     import { pb } from '$lib/pb';
-    import Auth from '$lib/components/Auth.svelte';
     import Uploader from '$lib/components/Uploader.svelte';
 
     let sheets = $state([]);
@@ -24,7 +23,6 @@
 <main class="p-8 max-w-4xl mx-auto space-y-8">
     <header class="flex justify-between items-center">
         <h1 class="text-3xl font-bold font-retro">App</h1>
-        <Auth />
     </header>
 
     {#if pb.authStore.isValid}
