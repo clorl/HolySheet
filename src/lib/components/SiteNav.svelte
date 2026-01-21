@@ -1,19 +1,5 @@
 <script>
-import auth from '$lib/auth.svelte.js';
-//let user = $state(pb.authStore.model);
-
-// Sync state when auth changes
-// pb.authStore.onChange(() => {
-//     user = pb.authStore.model;
-// });
-
-// async function login() {
-//     await pb.collection('users').authWithPassword(email, password);
-// }
-//
-// function logout() {
-//     pb.authStore.clear();
-// }
+import auth from '$lib/user.svelte.js';
 </script>
 
 <div class="navbar bg-base-100 shadow-sm">
@@ -44,7 +30,7 @@ import auth from '$lib/auth.svelte.js';
 						</a>
 					</li>
 					<li><a>Settings</a></li>
-					<li><a>Logout</a></li>
+					<li onclick={auth.logout}><a>Logout</a></li>
 				</ul>
 			</div>
 
