@@ -1,2 +1,7 @@
 import PocketBase from 'pocketbase';
-export const pb = new PocketBase('http://127.0.0.1:8090');
+import config from '$lib/config';
+
+export const pb = new PocketBase(config.pocketbaseUrl);
+export function create() {
+	return new PocketBase(config.pocketbaseUrl);
+}

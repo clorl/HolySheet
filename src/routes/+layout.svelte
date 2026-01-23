@@ -1,10 +1,16 @@
 <script>
-	import { dev } from '$app/environment';
-	import './layout.css';
-	import favicon from '$lib/assets/favicon.svg';
-	import Nav from '$lib/components/SiteNav.svelte';
+import { dev } from '$app/environment';
+import './app.css';
+import favicon from '$lib/assets/favicon.svg';
+import Nav from '$lib/components/SiteNav.svelte';
 
-	let { children } = $props();
+let { children } = $props();
+
+export const load = ({ locals }) => {
+	return {
+		user: locals.user 
+	};
+};
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
@@ -13,11 +19,11 @@
 
 {#if dev}
 
-<div class="toast toast-end">
-  <div class="alert alert-warning">
-    <span>You are in dev mode</span>
-  </div>
-</div>
-	
+	<div class="toast toast-end">
+		<div class="alert alert-warning">
+			<span>You are in dev mode</span>
+		</div>
+	</div>
+
 {/if}
 

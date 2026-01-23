@@ -2,8 +2,7 @@
 import auth from "$lib/user.svelte.js";
 import ErrorIcon from "$lib/components/icons/Error.svelte"
 import { page } from '$app/state';
-import { redirect } from '@sveltejs/kit';
-
+import { goto } from '$app/navigation';
 
 const redirectTo = $derived(page.url.searchParams.get('redirectTo') || '/');
 
@@ -43,7 +42,7 @@ async function submit(e) {
 		console.log(err);
 		return;
 	}
-	redirect(307, redirectTo);
+	goto(redirectTo);
 }
 
 </script>
