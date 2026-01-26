@@ -1,18 +1,32 @@
-// A getter module to make accessing user data easier and coherent throughout the app
+import { pb, user } from '$lib/pocketbase';
+import { goto } from '$app/navigation';
 
-import { pb } from '$lib/pb';
-import { page } from '$app/state';
+export default {
+	async login(email, password) {
+		try {
+			const authData = await pb.collection('users').authWithPassword(email, password);
+			return { success: true, data: authData };
+		} catch (error) {
+			return { success: false, error: error};
+		}
+	},
 
-export const user = {
-	get isLoggedIn() {
-		return pb.authStore.isValid && page.data.user;
+	async register(email, password, passwordConfirm) {
+		try {
+			await pb.collection('users').create({
+				name,
+				email,
+				password,
+				passwordConfirm,
+			});
+			return await this.login(email, password);
+		} catch (error) {
+			return { success: false, error: error};
+		}
 	},
-	get data() {
-		return page.data.user;
-	},
-	get avatarUrl() {
-	return this.data().avatar
-			? `${pb.baseUrl}/api/files/_pb_users_auth_/${user.id}/${user.avatar}?thumb=100x100`
-				: `https://ui-avatars.com/api/?name=${user?.name || user?.email}&background=random`
+
+	logout() {
+		pb.authStore.clear();
+		goto('/');
 	}
-}
+};

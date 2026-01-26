@@ -6,6 +6,7 @@ import { page } from '$app/state';
 import { goto } from '$app/navigation'; 
 import { enhance } from '$app/forms';
 import { fade, fly } from "svelte/transition";
+import { login, signup } from "$lib/user";
 
 let { form } = $props();
 let loading = $state(false);
@@ -15,7 +16,6 @@ const AUTH_VIEWS = {
 		title: "Hey it's you!",
 		desc: "Missed a session? Hope the GM isn't too mad!",
 		submitLabel: "Log In",
-		action: "?/login",
 		fields: [
 			{name: "email", label: "E-mail or Username", required: true, placeholder: pickRandom(['bond.james.bond@outlook.com', 'gale4waterdeep@gmail.com', 'live.love.craft@gmail.com'])},
 			{name: "password", label: "Password", type:"password", required: true, placeholder: "Password" },
@@ -25,7 +25,6 @@ const AUTH_VIEWS = {
 		title: "Welcome to the party",
 		desc: "Create your account to manage your character sheets. It's free!",
 		submitLabel: "Sign Up",
-		action: "?/signup",
 		fields: [
 			{name: "email", type:"email", label: "E-mail", required: true, placeholder: pickRandom(['bond.james.bond@outlook.com', 'gale4waterdeep@gmail.com', 'live.love.craft@gmail.com'])},
 			{name: "name", label: "Username", required: true, placeholder: pickRandom(['L0RD_V0LD', 'Not Jergal', 'Muad Dib', 'just_a_bugbear'])},
@@ -37,7 +36,6 @@ const AUTH_VIEWS = {
 		title: "Can't connect?",
 		desc: "Enter your e-mail or username and we'll send a password reset link.",
 		submitLabel: "Reset Password",
-		action: "?/reset",
 		fields: [
 			{name: "email", label: "E-mail or Username", required: true },
 		]
@@ -45,7 +43,7 @@ const AUTH_VIEWS = {
 };
 
 const curView = $derived(page.url.searchParams.get('action') || 'login');
-let { title, desc, submitLabel, action, fields } = $derived(AUTH_VIEWS[curView] || AUTH_VIEWS.login);
+let { title, desc, submitLabel, fields } = $derived(AUTH_VIEWS[curView] || AUTH_VIEWS.login);
 const disabled = $derived(loading);
 
 function switchView(view) {
@@ -61,6 +59,19 @@ if (dev) {
 	});
 }
 
+
+function submit(e) {
+	e.preventDefault();
+	loading = true;
+	switch (curView) {
+		case "login":
+			const { success, error } = await user.login(email, password);
+		case "signup":
+			const { success, error } = await user.register(email, password);
+		case "reset":
+			break;
+	}
+}
 </script>
 
 
@@ -77,16 +88,9 @@ if (dev) {
 
 		{#key curView}
 		<div class="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100" in:fly={{ x:20, duration: 300, delay: 50 }}>
-			<form 
-				method="POST"
-				action={action}
-				use:enhance={() => {
-					loading = true;
-					return async ({ update }) => {
-						await update();
-						loading = false;
-					};
-				}}>
+			<form
+				onsubmit={submit}
+			>
 
 				<Form 
 					fields={fields}

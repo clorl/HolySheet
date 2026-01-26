@@ -1,7 +1,10 @@
 import PocketBase from 'pocketbase';
-import config from '$lib/config';
+import { writable } from 'svelte/store';
 
-export const pb = new PocketBase(config.pocketbaseUrl);
-export function create() {
-	return new PocketBase(config.pocketbaseUrl);
-}
+export const pb = new PocketBase('/');
+
+export const user = writable(pb.authStore.model);
+
+pb.authStore.onChange((auth) => {
+    user.set(pb.authStore.model);
+});

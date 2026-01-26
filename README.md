@@ -16,7 +16,7 @@ It's meant to be self-hosted but if it gets a little clout, I'll start a Patreon
 
 ## MVP
 
-- Auth using Google OAuth2
+- Auth using OAuth2
 - Manage your list of character sheets
 - Upload PDF
 - Supported field types : Text, checkbox, radio
@@ -44,25 +44,33 @@ TBD
 - Cool branding
 - Documentation
 
+# Tech
+Uses pocketbase as a backend, which serves a static CSR svelte app. The svelte app handles routing on the client and lives at dist/pb_public/index.html
+
+Pocketbase behaviour may be customized by adding code to dist/pb_hooks
+
+Dev mode uses Vite to make iteration easier
+
 # Building from source
 TBD
 
 # Development
 ## Dependencies
 - Bun
+- Pocketbase
 
 ## Setup
-(To complete)
-- Download Pocketbase binary for your OS
-- Put it in a new directory named `backend` at the project root
-- Run `bun run server` once, create a superuser 
-- Create the DB schema (TODO: provide mock data and schema)
+1. Download Pocketbase binary for your OS
+2. Put it in the `dist` directory, named `pocketbase` (.exe)
 
-Backend: localhost:8090
-Frontend: localhost:5173
+## Development
+1. For now mock data is provided in the repo for easier dev
+2. Run `bun run dev:pb` and `bun run dev:svelte` in parallel.
+3. You can visit the backend dashboard at `localhost:8090/_` (Admin login:password -> admin@admin.com:AdminAdmin1)
+4. Visit the app at `localhost:5173`
 
-## Run
-`bun run dev`
+## Build
+TODO
 
 # Deployment
 TBD
@@ -77,4 +85,4 @@ Please open an issue if you'd like to contribute and we'll make it happen. For n
 
 # License
 
-GPL latest version idk which one it is right now
+AGPL latest version idk which one it is right now
