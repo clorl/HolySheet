@@ -1,9 +1,7 @@
 <script>
 import { page } from '$app/state';
 import { dev } from "$app/environment";
-
-let { data } = $props();
-let user = data?.user;
+import { currentUser, getAvatar } from "$lib/user"
 
 const NAV_ENTRIES = {};
 </script>
@@ -14,15 +12,11 @@ const NAV_ENTRIES = {};
 	</div>
 
 	<div class="flex gap-2">
-		{#if dev}
-			<pre>User: {JSON.stringify(user, null, 2) || "Null"}</pre>
-		{/if}
-
-		{#if data?.user}
+		{#if $currentUser}
 		<div class="dropdown dropdown-end">
 			<div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
 				<div class="w-10 rounded-full">
-						<img src={data?.user.avatarUrl} alt="avatar" />
+						<img src={getAvatar($currentUser)} alt="avatar" />
 				</div>
 			</div>
 
@@ -31,12 +25,12 @@ const NAV_ENTRIES = {};
 				<div class="flex flex-col items-center border-b border-base-200 px-6 py-6 text-center">
 					<div class="avatar mb-3">
 						<div class="w-16 rounded-full ring ring-primary ring-offset-2 ring-offset-base-100">
-							<img src={data?.user.avatarUrl} alt="avatar" />
+							<img src={getAvatar($currentUser)} alt="avatar" />
 						</div>
 					</div>
 					<div class="w-full truncate">
-						<p class="text-lg font-bold leading-none">{data?.user.name || 'Anonymous'}</p>
-						<p class="mt-1 text-sm opacity-60 truncate">{data?.user.email}</p>
+						<p class="text-lg font-bold leading-none">{$currentUser.name || 'Anonymous'}</p>
+						<p class="mt-1 text-sm opacity-60 truncate">{$currentUser.email}</p>
 					</div>
 				</div>
 

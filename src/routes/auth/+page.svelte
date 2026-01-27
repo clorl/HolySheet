@@ -1,14 +1,13 @@
 <script>
 import Form from '$lib/components/form/Form.svelte';
 import { dev } from '$app/environment';
-import { pickRandom } from '$lib/util';
+import { pickRandom } from '$lib/misc';
 import { page } from '$app/state';
 import { goto } from '$app/navigation'; 
 import { enhance } from '$app/forms';
 import { fade, fly } from "svelte/transition";
-import { login, signup } from "$lib/user";
+import * as user from "$lib/user";
 
-let { form } = $props();
 let loading = $state(false);
 
 const AUTH_VIEWS = {
@@ -50,27 +49,34 @@ function switchView(view) {
 	goto(`?view=${view}`, { replaceState: true, keepFocus: true, noScroll: true });
 }
 
-if (dev) {
-	$effect(() => {
-		if (form?.error?.data) {
-			console.log("Error");
-			console.log(form.error.data);
-		}
-	});
-}
+let error = $state();
+let success = $state();
+let formData = $state({});
 
-
-function submit(e) {
+async function submit(e) {
 	e.preventDefault();
+	console.log(formData);
 	loading = true;
+	var res;
 	switch (curView) {
 		case "login":
-			const { success, error } = await user.login(email, password);
+			res = await user.login(formData.email, formData.password, null);
+			break;
 		case "signup":
-			const { success, error } = await user.register(email, password);
+			res = await user.register(formData.email, formData.password, formData.passwordConfirm, formData.name, null);
+			break;
 		case "reset":
+			res = await user.resetPassword(formData.email);
 			break;
 	}
+	if (res.error) {
+		error = res.error;
+		console.log(res.error);
+	}
+	if (res.result) {
+		success = res.result;
+	}
+	loading = false;
 }
 </script>
 
@@ -93,6 +99,7 @@ function submit(e) {
 			>
 
 				<Form 
+					bind:values={formData}
 					fields={fields}
 					submitLabel={submitLabel}
 				>
@@ -151,9 +158,13 @@ function submit(e) {
 				</Form>
 			</form>
 
-			{#if form?.error}
+			{#if error}
 				<div class="alert alert-error shadow-lg mb-4 px-2">
-					<span>{form.error}</span>
+					<span>{error}</span>
+				</div>
+			{:else if success}
+				<div class="alert alert-success shadow-lg mb-4 px-2">
+					<span>{success}</span>
 				</div>
 			{/if}
 
