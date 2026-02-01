@@ -11,7 +11,7 @@ export const load = ({ locals }) => {
 		user: locals.user 
 	};
 };
-export const prerender = true;
+//export const prerender = true;
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>

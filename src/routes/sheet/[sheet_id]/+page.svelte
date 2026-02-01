@@ -1,49 +1,35 @@
 <script>
-import { page } from '$app/state';
-import { getComponent, createSheet, createPage } from '$lib/sheet';
-let { page, sheetData = $bindable() } = $props();
+	import SheetEditor from "$lib/components/sheet/SheetEditor.svelte";
+	import { Sheet, Page, CanvasItem } from "$lib/sheet.js";
+	let sheet = $state(null);
 
-let id = $derived(page.params.id);
-let sheet = $state(null);
+  // Simulated Fetch
+  const loadSheet = async () => {
+    sheet = Sheet.new({
+        name: "Torbek the Mighty",
+        data: { str: "18", dex: "12", con: "16" },
+        pages: [
+            Page.new({
+                backgroundImage: "/sheet-1.jpg",
+                items: [
+                    CanvasItem.new({ name: "str", label: "Strength", x: 0.45, y: 0.15, w: 100, h: 40 })
+                ]
+            }),
+            Page.new({ backgroundImage: "/sheet-2.jpg" }),
+            Page.new({ backgroundImage: "/sheet-3.jpg" })
+        ]
+    });
+  };
 
-// MOCK FETCH FUNCTION
-const getSheet = async (sheetId) => {
-	// Simulating PocketBase delay
-	await new Promise(r => setTimeout(r, 400));
-	return createSheet({
-		id: sheetId,
-		name: "Torbek",
-		pages: [
-			createPage({ order: 0, backgroundUrl: '/sheet-1.jpg' }),
-			createPage({ order: 1, backgroundUrl: '/sheet-2.jpg' }),
-			createPage({ order: 2, backgroundUrl: '/sheet-3.jpg' })
-		]
-	});
-};
-
-$effect(() => {
-	getSheet(id).then(res => sheet = res);
-});
+  loadSheet();
 </script>
 
-{#if sheet && sheet?.pages?.length}
-<div class="flex flex-col items-center gap-8 p-4 bg-base-300 min-h-screen">
-<!-- <h1 class="text-2xl font-bold">{sheet.name}</h1> -->
-
-{#each sheet.pages as p}
-<div class="relative shadow-2xl border border-base-content/10 bg-white">
-	<img src={p.backgroundUrl} alt="Sheet Page" class="w-[800px] block" />
-
-	<div class="absolute inset-0">
-		{#each page.elements as el (el.id}
-			<svelte:component
-							this={getComponent(el.type)}
-							config={el}
-							bind:value={sheetData[el.dataKey]}
-			/>
-		{/each}
-	</div>
+<div class="relative min-h-screen bg-base-300 font-sans text-base-content overflow-hidden flex flex-col">
+	{#if sheet}
+		<SheetEditor initialData={sheet} />
+    <!-- <div class="flex-1 overflow-y-auto pt-28 pb-12 px-4 scroll-smooth"> -->
+    <!-- </div> -->
+	{:else}
+		<div class="skeleton h-[1vh] w-[0.75vw]"></div>
+	{/if}
 </div>
-{/each}
-</div>
-{/if}
