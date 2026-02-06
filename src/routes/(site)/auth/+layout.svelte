@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
     import { currentUser } from '$lib/user';
-    import { pb } from '$lib/pocketbase';
+    import { pb } from '$lib/pb';
 
     let { children } = $props();
     let loading = $state(true);

@@ -26,9 +26,7 @@
 
 <div class="relative min-h-screen bg-base-300 font-sans text-base-content overflow-hidden flex flex-col">
 	{#if sheet}
-		<SheetEditor initialData={sheet} />
-    <!-- <div class="flex-1 overflow-y-auto pt-28 pb-12 px-4 scroll-smooth"> -->
-    <!-- </div> -->
+		<SheetEditor data={sheet} />
 	{:else}
 		<div class="skeleton h-[1vh] w-[0.75vw]"></div>
 	{/if}
